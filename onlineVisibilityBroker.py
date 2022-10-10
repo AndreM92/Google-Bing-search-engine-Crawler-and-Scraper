@@ -42,7 +42,7 @@ keywords= [
 ]
 
 # I'm setting the driver for Selenium
-driver = webdriver.Chrome('C:\\Users\\andre\Documents\Python\chromedriver.exe')
+driver = webdriver.Chrome('[path to your driver]\chromedriver.exe')
 
 # Click through cookie-banners
 driver.get('https://www.google.de/?hl=de')
@@ -128,16 +128,7 @@ dfAds = pd.DataFrame(data[0],columns=['company','keyword','rank','page','title',
 dfHits = pd.DataFrame(data[1],columns=['company','keyword','rank','page','title','content','fullcontent','link'])
   
 # I'm exporting the data into one excel-file and save the dataframes in different sheets
-path = "C:\\Users\\andre\\OneDrive\Desktop\googleSearchResults.xlsx"
+path = '[path to the place where you want to save this file]\googleSearchResults.xlsx"
 with pd.ExcelWriter(path, engine='openpyxl') as writer:
     dfAds.to_excel(writer,sheet_name='Advertisements')
-    dfHits.to_excel(writer,sheet_name='Search_Results')            
-
-    
-
-
-    
-    
-
-
-
+    dfHits.to_excel(writer,sheet_name='Search_Results')
