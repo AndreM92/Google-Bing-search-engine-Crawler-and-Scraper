@@ -60,7 +60,7 @@ def crawlScrape():
         print('Searching for: ' + k)
         #this should always be the startpage
         driver.get('https://www.google.de/?hl=de')
-        WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'lnXdpd')))        
+        time.sleep(1)        
        
         searchbox = driver.find_element('xpath','/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
         searchbox.clear()
@@ -93,7 +93,7 @@ def crawlScrape():
                             tags = ad.find('div',class_='XUpIGb MUxGbd lyLwlc aLF0Z OSrXXb').text
                         except:
                             tags = ''
-                        fullcontent = ad.text.split('Anzeige·')[-1]
+                        fullcontent = ad.text
                             
                         dataAds.append([c,k,rankAds,page,title,content,tags,fullcontent,link])
                         
@@ -104,7 +104,10 @@ def crawlScrape():
                 link = h.find('a')['href']
                 for c in companies:
                     if c + '.de' in link or c + '.com' in link or c + '.net' in link or 'de.' + c in link:
-                        title = h.find('h3',class_='LC20lb MBeuO DKV0Md').text
+                        try:
+                            title = h.find('h3',class_='LC20lb MBeuO DKV0Md').text
+                        except:
+                            str(h.find('h3',class_='LC20lb MBeuO DKV0Md'))
                         try:
                             content = h.find('div',class_='VwiC3b yXK7lf MUxGbd yDYNvb lyLwlc lEBKkf').text
                         except:
