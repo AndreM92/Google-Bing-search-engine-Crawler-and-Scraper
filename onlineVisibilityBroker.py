@@ -15,6 +15,11 @@ import lxml
 import time
 import pandas as pd
 
+# Imports for fixing the driver bug (Window closes unintended)
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+
 companies = [
     'agora-direct',
     'banxbroker',
@@ -45,10 +50,16 @@ keywords= [
 driver = webdriver.Chrome('[path to your driver]\chromedriver.exe')
 
 # Click through cookie-banners
-driver.get('https://www.google.de/?hl=de')
-WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
-driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
-
+try:
+    driver.get('https://www.google.de/?hl=de')
+    WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
+    driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
+except:
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
+    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+    WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
+    driver.find_element('xpath','//*[@id="W0wltc"]/div').click()    
 
 # This function crawls through the google search engine and scrapes all the relevant data
 def crawlScrape():
