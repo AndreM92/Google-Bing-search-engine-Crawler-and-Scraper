@@ -13,13 +13,39 @@ import selenium.webdriver.support.expected_conditions as EC
 from bs4 import BeautifulSoup
 import lxml
 import time
+import numpy as np
 import pandas as pd
 
-# Imports for fixing the driver bug (Window closes unintended)
+# Just in case a driver bug happens (Window closes unintended)
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+# Alternative setting options
+def fixDriverbug():
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
+    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+    driver.maximize_window()
+    driver.get('https://www.google.de/?hl=de')
+    WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
+    try:
+        driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
+        time.sleep(1)
+    except:
+        time.sleep(2)
+        driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
+        time.sleep(1)
+    try:
+        driver.find_element('xpath','/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
+    except:
+        print('There is something wrong with the page')
+        time.sleep(1)
+        driver.close()
+        exit()
 
+###############################################################################
+# Setting the companies and keywords I'm searching for
+# Import company names from their url
 companies = [
     'agora-direct',
     'banxbroker',
@@ -46,21 +72,20 @@ keywords= [
     'Wertpapiere'
 ]
 
-# I'm setting the driver for Selenium
-driver = webdriver.Chrome('[path to your driver]\chromedriver.exe')
-
-# Click through cookie-banners
+###############################################################################
+# Setting the driver and click through the cookie banner
+driver = webdriver.Chrome('C:\\Users\\andre\Documents\Python\chromedriver.exe')
+driver.maximize_window()
+driver.get('https://www.google.de/?hl=de')
+WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
+driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
 try:
-    driver.get('https://www.google.de/?hl=de')
-    WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
-    driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
+    time.sleep(2)
+    driver.find_element('xpath','/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
 except:
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
-    WebDriverWait(driver,5).until(EC.presence_of_element_located((By.CLASS_NAME,'jw8mI')))
-    driver.find_element('xpath','//*[@id="W0wltc"]/div').click()    
+    fixDriverbug()  
 
+###############################################################################
 # This function crawls through the google search engine and scrapes all the relevant data
 def crawlScrape():
     dataAds = []   
