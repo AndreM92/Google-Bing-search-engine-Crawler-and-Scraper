@@ -1,5 +1,9 @@
 # Google-Search-Scraper
-This program analyzes the online visibility of selected companies based on google search results. </br>
+These Crawler and Scraper can analyze the online visibility of selected companies based on google search results. </br>
+
+## GoogleSearchCrawlScraper
+This is a newer version of my Google Crawling and Scraping program applied on heat pumps.</br>
+I've implemented some classes and functions to make the code much better readable and more efficient.
 
 ## onlineVisibilityBroker
 I have applied this program on 15 popular German Brokers and selected 5 keywords. </br>
