@@ -9,6 +9,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import selenium.webdriver.support.expected_conditions as EC
+from selenium.common.exceptions import *
 
 from bs4 import BeautifulSoup
 import lxml
@@ -33,17 +34,14 @@ def fixDriverbug():
         driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
         time.sleep(1)
     except:
-        time.sleep(2)
-        driver.find_element('xpath','//*[@id="W0wltc"]/div').click()
-        time.sleep(1)
-    try:
-        driver.find_element('xpath','/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
-    except Exception as e:
-        print(repr(e))
-        print('There is something wrong with the page')
-        time.sleep(1)
-        driver.close()
-        exit()
+        try:
+            driver.find_element('xpath','/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input')
+        except Exception as e:
+            print(repr(e))
+            print('There is something wrong with the page')
+            time.sleep(1)
+            driver.close()
+            exit()
 
 ###############################################################################
 # Setting the companies and keywords I'm searching for
@@ -198,10 +196,13 @@ class Crawler():
             
 # run the crawler    
 Crawler()
+
+# direct output
 #print(Ads().adList)
 #print(Hits().hitList)
 #print(Ads().getList())
 
+###############################################################################
 # The cleaned up data can be saved in dataframes
 headerAds = ['keyword','company','rank','page','title','content','tags','link','fullcontent']
 dfAds = pd.DataFrame(Ads().adList,columns=headerAds)
